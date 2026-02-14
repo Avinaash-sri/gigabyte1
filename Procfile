@@ -1,0 +1,1 @@
+web: gunicorn gigabyte1.wsgi
