@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-card glass">
+    <h1>Welcome Back</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Secure access to your verification dashboard.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" autofocus required id="id_username">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" required id="id_password">
+        </div>
+
+        <button type="submit" class="btn-submit">Secure Login</button>
+    </form>
+
+    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+        New to TrustGuard? <a href="{% url 'signup' %}" style="color: var(--primary);">Get Verified</a>
+    </p>
+</div>
+{% endblock %}

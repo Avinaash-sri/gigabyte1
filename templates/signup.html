@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-card glass">
+    <h1>Join TrustGuard</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">Verify your identity and access premium tools.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <small style="color: rgba(255,255,255,0.5); display: block; margin-top: 5px;">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <small style="color: #ef4444; display: block; margin-top: 5px;">{{ error }}</small>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+
+    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+        Already verified? <a href="{% url 'login' %}" style="color: var(--primary);">Login here</a>
+    </p>
+</div>
+{% endblock %}

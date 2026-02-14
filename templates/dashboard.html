@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="glass verifier-box">
+        <div class="dashboard-header">
+            <h2>AI Trust Verification</h2>
+            <p style="color: var(--text-secondary);">Analyze internship & job portals for legitimacy, scams, and trusted
+                reviews.</p>
+        </div>
+
+        <form id="verifyForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="urlInput">Internship/Job Portal URL</label>
+                <input type="url" id="urlInput" placeholder="https://example.com/job-posting" required>
+            </div>
+            <button type="submit" class="btn-submit" id="scanBtn">
+                <span id="btnText">Analyze Portal</span>
+                <span id="loader" style="display:none;">Analyzing...</span>
+            </button>
+        </form>
+
+        <div id="resultBox" class="result-box">
+            <h3 id="resultTitle">Trust Analysis Complete</h3>
+            <p id="resultUrl" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;"></p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <span style="font-size: 0.9rem; color: var(--text-secondary);">Final Trust Score</span>
+                    <div style="font-size: 2.5rem; font-weight: 700; line-height: 1;"><span
+                            id="trustScore">0</span><span
+                            style="font-size: 1rem; color: var(--text-secondary);">/100</span></div>
+                </div>
+                <span id="safetyStatus" class="status-badge" style="font-size: 1rem; padding: 8px 16px;">Unknown</span>
+            </div>
+
+            <!-- Detailed Breakdown -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div class="metric-card"
+                    style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Legitimacy</div>
+                    <div style="font-size: 1.2rem; font-weight: 600;" id="legitimacyScore">-</div>
+                </div>
+                <div class="metric-card"
+                    style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Brand Verify</div>
+                    <div style="font-size: 1.2rem; font-weight: 600;" id="brandScore">-</div>
+                </div>
+                <div class="metric-card"
+                    style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Scam Pattern</div>
+                    <div style="font-size: 1.2rem; font-weight: 600;" id="scamScore">-</div>
+                </div>
+                <div class="metric-card"
+                    style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px;">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Reviews</div>
+                    <div style="font-size: 1.2rem; font-weight: 600;" id="reviewScore">-</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="glass verifier-box">
+        <h3>Recent Scans</h3>
+        <ul class="history-list">
+            {% for log in logs %}
+            <li class="history-item">
+                <span
+                    style="font-size: 0.9rem; max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{
+                    log.url }}</span>
+                {% if log.is_safe %}
+                <span class="status-badge status-safe">Trusted</span>
+                {% else %}
+                <span class="status-badge status-unsafe">Suspicious</span>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li style="color: var(--text-secondary); text-align: center;">No scans yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
